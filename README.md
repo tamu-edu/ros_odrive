@@ -4,7 +4,9 @@ This repository contains a ROS2 node intended for communication with ODrive moto
 
 ## Changes from the base package ##
 
-We've made some changes to this package to make it more versatile than the base odrive_can package. 
+We've made some changes to this package to make it more versatile than the base odrive_can package. They are defined below before the original Odrive readme.  
+
+## New Publisher ##
 
 ### ODriveStatusAdvanced ###
 
@@ -39,6 +41,32 @@ The message consists of all the fields from ODriveStatus followed by all the fie
 [Important] ODriveStatusAdvanced sends out the electrical and mechanical power of the ODrive however, the powers_msg_rate_ms property on the ODrive is set to 0 by default. If this is left at 0 the ODrive won't send the powers over can and ODriveStatusAdvanced won't send. 
 
 The topic of the ODriveStatusAdvanced publisher is "odrive_status_advanced". Though it should be noted that because of how the odrive_node works that in practice the topic will be the odrive's namespace followed by "odrive_status_advanced". E.g. "/pitch/odrv1/odrive_status_advanced".
+  
+
+## New Subscribers ##
+
+### Reboot ###
+
+We've added a custom ROS2 message called ControlPositionGain to take care of setting the Position gain via messages. 
+
+It's structure is shown below: 
+
+uint8 action
+
+This is a message that will be sent to the Odrive.
+
+Once the message is received by the Odrive's subscriber it will send a CAN message to reboot the odrive according to the action sent.
+
+action - specifies the action to reboot with. The 2 supported modes are: 
+    0 - reboot and reset setting to default  
+    1 - reboot and save current configuration.   
+  
+[Note] The CAN side allows 4 potential actions which is why we left this as a uint8. The other 2 are: 
+  3 - reboot and erase configuration. We haven't implemented this because this could do a lot of damage if improperly used.  
+  4 - reboot and enter_dfu_mode2(). This puts the odrive into a configuration that allows it to update its firmware over CAN bus. We haven't implemented this because we can update over usb.  
+
+The topic of the ControlGains subscriber is set to "control_pos_gain". Though it should be noted that because of how the odrive_node works that in practice the topic will be the odrive's namespace followed by "control_pos_gain". E.g. "/pitch/odrv1/control_pos_gain".
+
 
 ## Control Velocity Gains ##
 
@@ -83,7 +111,7 @@ The topic of the ControlGains subscriber is set to "control_pos_gain". Though it
 
 We've added a custom ROS2 message called ControlTrajVelLim to take care of setting the Traj_Vel_Limit via messages. 
 
-It's structure is shown below: 
+Its structure is shown below: 
 
 float32 traj_vel_limit
 
@@ -97,23 +125,23 @@ The topic of the ControlTrajVelLim subscriber is set to "control_traj_vel_lim". 
 
 ### Set Traj Accel Limits ###
 
-We've
+We've added a custom ROS2 message called ControlTrajAccelLims to take care of setting the traj_accel_limit and the traj_decel_limit via messages. 
 
-### Estop ###
+Its structure is shown below: 
+  
+float32 traj_accel_limit  
+float32 traj_decel_limit  
+  
+This is a message that will be sent to the Odrive.
 
-We've
+Once the message is received by the Odrive's subscriber it will send a CAN message to set the traj_accel_limit and the traj_decel_limit properties.
 
-### Reboot ###
+traj_accel_limit - specifies the new limit for traj acceleration
+traj_decel_limit - specifies the new limit for traj deceleration
 
-We've
-
-### Clear Errors ###
-
-We've
-
-### Config File ###
-
-We've
+The topic of the ControlTrajVelLim subscriber is set to "control_traj_accel_lims". Though it should be noted that because of how the odrive_node works that in practice the topic will be the odrive's namespace followed by "control_traj_accel_lims". E.g. "/pitch/odrv1/control_traj_accel_lims".
+  
+## New Services ##
 
 ### ValueAccess ###
 
@@ -157,6 +185,61 @@ data_type_specifier - (0 - bool, 1 - float32, 2 - int32, 3 - uint64, 4 - uint32,
 The other parameters are just used to send or receive the values themselves. To work with ROS and C++ we had to make them separate parameters but only one should be populated at a time and it should be specified with the data_type_specifier.
 
 The service name will be "access_value" combined with the odrive's namespace. E.g. "/pitch/odrv1/access_value"
+
+
+### Estop ###
+
+We've added a custom ROS service to estop the odrive using CAN bus. 
+
+The structure of the service call is as follows:  
+ 
+\-\-\-  
+bool estopped_system
+
+This is a service that will be sent to the Odrive and the Odrive will send a response back to the client.
+
+The first part of the service message is the structure of the request that we send through to the odrive. The second part of the service message is the structure of the response that we receive. 
+
+In this case the first part is blank because we don't send through any values for the request. 
+
+estopped_system - this is a boolean that returns true if the system is estopped. At the moment there is no way to test that so it always returns True. (Service responses can't be blank so there has to be a value returned.
+
+The service name will be "estop" combined with the odrive's namespace. E.g. "/pitch/odrv1/estop"
+
+  
+### Clear Errors ###
+
+
+We've added a custom ROS service to clear the errors on the odrive using CAN bus. 
+
+The structure of the service call is as follows:  
+ 
+\-\-\-  
+bool cleared_errors
+
+This is a service that will be sent to the Odrive and the Odrive will send a response back to the client.
+
+The first part of the service message is the structure of the request that we send through to the odrive. The second part of the service message is the structure of the response that we receive. 
+
+In this case the first part is blank because we don't send through any values for the request. 
+
+cleared_errors - this is a boolean that returns true if the odrive has cleared errors. At the moment there is no way to test that so it always returns True. (Service responses can't be blank so there has to be a value returned.
+
+The service name will be "clear_errors" combined with the odrive's namespace. E.g. "/pitch/odrv1/clear_errors"
+
+## New Parameters ##
+
+### Config File ###
+
+We've added the capability of setting arbitrary parameters on the odrive when the code first starts by getting values from a passed in .yaml file. 
+
+This is controlled within the function ODriveCanNode::settingsFromConfig(). It pulls in parameters based on type specific dictionaries that are defined within it. For each data type of parameters that can be accessed (bool, float32, int32, uint64, uint32, uint16, uint8) there is a dictionary that contains key, value paris of parameter names matched with their endpoint ids. The endpoint ids you can find in the odrive documentation. To allow setting a new value from the config file you simply need to add the name of the parameter you are passing in and the endpoint where the parameter is found to the correct dictionary. You will need to update the odrive code itself in order to make this change. 
+E.g. for the parameter config.odrv_fan.enabled which for the firmware version 0.6.9-1 is a boolean found at endpoint 192 you would add this line: 
+bool_parameter_map["config.odrv_fan.enabled"] = 192;   
+
+An example config yaml file is included with the code in the directory 'config'
+
+## Other ##
 
 ### Comments ###
 
