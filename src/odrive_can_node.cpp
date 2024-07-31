@@ -357,7 +357,7 @@ void ODriveCanNode::recv_callback(const can_frame& frame) {
                 case 2: {
                     // int32
                     RCLCPP_DEBUG(rclcpp::Node::get_logger(), "read value type was int32");
-                    value_access_reponse_.int_value   = read_le<uint64_t>(frame.data + 4);
+                    value_access_reponse_.uint_value   = read_le<uint64_t>(frame.data + 4);
                     break;
 
                 }
