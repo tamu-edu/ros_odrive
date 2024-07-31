@@ -897,6 +897,8 @@ bool ODriveCanNode::settingsFromConfig(){
 
         float_parameter_map["axis0.controller.config.vel_gain"] = 401;
         float_parameter_map["axis0.controller.config.vel_integrator_gain"] = 402;
+        float_parameter_map["axis0.controller.config.vel_integrator_limit"] = 403;
+        
         
         
 
