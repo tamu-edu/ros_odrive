@@ -153,22 +153,14 @@ uint8 opcode
 uint16 endpoint_id  
 uint32 data_type_specifier  
 bool bool_value  
-float32 float32_value  
-int32 int32_value  
-uint64 uint64_value  
-uint32 uint32_value  
-uint16 uint16_value  
-uint8 uint8_value  
+float32 float_value
+uint64 uint_value  
 \-\-\-  
 uint8 opcode  
 uint16 endpoint_id  
 bool bool_value  
-float32 float32_value  
-int32 int32_value  
-uint64 uint64_value  
-uint32 uint32_value  
-uint16 uint16_value  
-uint8 uint8_value  
+float32 float_value  
+uint64 uint_value  
 
 This is a service that will be sent to the Odrive and the Odrive will send a response back to the client.
 
@@ -180,7 +172,7 @@ opcode - (0 - read, 1 - write) This is functionally a boolean we use to specify 
 
 endpoint_id - This is the endpoint of the value as specified for the relevant version of the firmware. (It changes each firmware version so you should check [this list](https://docs.odriverobotics.com/releases/firmware) to find the right endpoint ids for your your version.
 
-data_type_specifier - (0 - bool, 1 - float32, 2 - int32, 3 - uint64, 4 - uint32, 5 - uint16, 6 - uint8) This will specify the type of data that is being passed to the odrive or should be expected to be received. This is necessary otherwise our code won't know how to handle the values. 
+data_type_specifier - (0 - bool, 1 - float32, 2 - uint max size of 64) This will specify the type of data that is being passed to the odrive or should be expected to be received. This is necessary otherwise our code won't know how to handle the values. 
 
 The other parameters are just used to send or receive the values themselves. To work with ROS and C++ we had to make them separate parameters but only one should be populated at a time and it should be specified with the data_type_specifier.
 
