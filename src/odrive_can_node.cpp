@@ -771,7 +771,7 @@ void ODriveCanNode::value_access_service_callback(const std::shared_ptr<ValueAcc
                     case 4: {
                         // uint32
                         RCLCPP_DEBUG(rclcpp::Node::get_logger(), "value type was uint32");
-                        write_le<uint32_t>(request->uint_valuee,   frame.data + 4);
+                        write_le<uint32_t>(request->uint_value,   frame.data + 4);
                         break;
 
                     }
