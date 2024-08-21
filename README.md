@@ -47,7 +47,7 @@ The topic of the ODriveStatusAdvanced publisher is "odrive_status_advanced". Tho
 
 ### Reboot ###
 
-We've added a custom ROS2 message called ControlPositionGain to take care of setting the Position gain via messages. 
+We've added a custom ROS2 message called RebootMessage to reset the message via messages. 
 
 It's structure is shown below: 
 
