@@ -68,7 +68,7 @@ action - specifies the action to reboot with. The 2 supported modes are:
 The topic of the ControlGains subscriber is set to "control_pos_gain". Though it should be noted that because of how the odrive_node works that in practice the topic will be the odrive's namespace followed by "control_pos_gain". E.g. "/pitch/odrv1/control_pos_gain".
 
 
-## Control Velocity Gains ##
+### Control Velocity Gains ###
 
 We've added a custom ROS2 message called ControlVelocityGains to take care of setting the Velocity and Velocity Integrator gains as well as their limits via messages. 
 
@@ -90,7 +90,7 @@ vel_limit - The limit on the velocity. Set to infinity to disable.
 
 The topic of the ControlVelocityGains subscriber is set to "control_vel_gains". Though it should be noted that because of how the odrive_node works that in practice the topic will be the odrive's namespace followed by "control_vel_gains". E.g. "/pitch/odrv1/control_vel_gains".
 
-## Control Position Gains ##
+### Control Position Gains ###
 
 We've added a custom ROS2 message called ControlPositionGain to take care of setting the Position gain via messages. 
 
