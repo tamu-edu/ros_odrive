@@ -45,29 +45,6 @@ The topic of the ODriveStatusAdvanced publisher is "odrive_status_advanced". Tho
 
 ## New Subscribers ##
 
-### Reboot ###
-
-We've added a custom ROS2 message called RebootMessage to reset the message via messages. 
-
-It's structure is shown below: 
-
-uint8 action
-
-This is a message that will be sent to the Odrive.
-
-Once the message is received by the Odrive's subscriber it will send a CAN message to reboot the odrive according to the action sent.
-
-action - specifies the action to reboot with. The 2 supported modes are: 
-    0 - reboot and reset setting to default  
-    1 - reboot and save current configuration.   
-  
-[Note] The CAN side allows 4 potential actions which is why we left this as a uint8. The other 2 are: 
-  3 - reboot and erase configuration. We haven't implemented this because this could do a lot of damage if improperly used.  
-  4 - reboot and enter_dfu_mode2(). This puts the odrive into a configuration that allows it to update its firmware over CAN bus. We haven't implemented this because we can update over usb.  
-
-The topic of the ControlGains subscriber is set to "control_pos_gain". Though it should be noted that because of how the odrive_node works that in practice the topic will be the odrive's namespace followed by "control_pos_gain". E.g. "/pitch/odrv1/control_pos_gain".
-
-
 ### Control Velocity Gains ###
 
 We've added a custom ROS2 message called ControlVelocityGains to take care of setting the Velocity and Velocity Integrator gains as well as their limits via messages. 
@@ -140,6 +117,28 @@ traj_accel_limit - specifies the new limit for traj acceleration
 traj_decel_limit - specifies the new limit for traj deceleration
 
 The topic of the ControlTrajVelLim subscriber is set to "control_traj_accel_lims". Though it should be noted that because of how the odrive_node works that in practice the topic will be the odrive's namespace followed by "control_traj_accel_lims". E.g. "/pitch/odrv1/control_traj_accel_lims".
+
+### Reboot ###
+
+We've added a custom ROS2 message called RebootMessage to reset the message via messages. 
+
+It's structure is shown below: 
+
+uint8 action
+
+This is a message that will be sent to the Odrive.
+
+Once the message is received by the Odrive's subscriber it will send a CAN message to reboot the odrive according to the action sent.
+
+action - specifies the action to reboot with. The 2 supported modes are: 
+    0 - reboot and reset setting to default  
+    1 - reboot and save current configuration.   
+  
+[Note] The CAN side allows 4 potential actions which is why we left this as a uint8. The other 2 are: 
+  3 - reboot and erase configuration. We haven't implemented this because this could do a lot of damage if improperly used.  
+  4 - reboot and enter_dfu_mode2(). This puts the odrive into a configuration that allows it to update its firmware over CAN bus. We haven't implemented this because we can update over usb.  
+
+The topic of the ControlGains subscriber is set to "control_pos_gain". Though it should be noted that because of how the odrive_node works that in practice the topic will be the odrive's namespace followed by "control_pos_gain". E.g. "/pitch/odrv1/control_pos_gain".
   
 ## New Services ##
 
