@@ -406,7 +406,7 @@ void ODriveCanNode::recv_callback(const can_frame& frame) {
 
         // CUSTOM CODE END
         default: {
-            RCLCPP_WARN(rclcpp::Node::get_logger(), "Received unused message: ID = 0x%x", (frame.can_id & 0x1F));
+            // RCLCPP_WARN(rclcpp::Node::get_logger(), "Received unused message: ID = 0x%x", (frame.can_id & 0x1F));
             break;
         }
     }
