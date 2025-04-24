@@ -146,6 +146,7 @@ ODriveCanNode::ODriveCanNode(const std::string& node_name) : rclcpp::Node(node_n
     odrv_advanced_received_powers_ = false;
 
 
+    this->declare_parameter<bool>("set_values_from_config", false);
 
 
     // CUSTOM CODE END
@@ -179,9 +180,16 @@ bool ODriveCanNode::init(EpollEventLoop* event_loop) {
     RCLCPP_INFO(rclcpp::Node::get_logger(), "interface: %s", interface.c_str());
 
 
+    bool set_config;
+    this->get_parameter("set_values_from_config", set_config);
     
-
-    bool set_config_correctly = settingsFromConfig();
+   if(set_config){
+        set_config = settingsFromConfig();
+        RCLCPP_INFO(rclcpp::Node::get_logger(), "set values");
+    }else{
+        RCLCPP_INFO(rclcpp::Node::get_logger(), "did not set values");
+    }
+    
 
     return true;
 }
@@ -406,7 +414,7 @@ void ODriveCanNode::recv_callback(const can_frame& frame) {
 
         // CUSTOM CODE END
         default: {
-            // RCLCPP_WARN(rclcpp::Node::get_logger(), "Received unused message: ID = 0x%x", (frame.can_id & 0x1F));
+            RCLCPP_WARN(rclcpp::Node::get_logger(), "Received unused message: ID = 0x%x", (frame.can_id & 0x1F));
             break;
         }
     }
@@ -854,7 +862,7 @@ bool ODriveCanNode::settingsFromConfig(){
         // Trying to set all of the odrive settings from a config file
         // return true if you succeed and false if there is an error
 
-        RCLCPP_INFO(this->get_logger(), "LOADING passed in ODrive config values");
+        RCLCPP_INFO(this->get_logger(), "LOADING odrive config values");
 
         std::map<std::string, int> bool_parameter_map;
 
@@ -939,7 +947,7 @@ bool ODriveCanNode::settingsFromConfig(){
 
              } catch (const std::runtime_error& e){
             
-            // RCLCPP_ERROR(this->get_logger(), "FAILED TO LOAD ALL bool CONFIG VALUES FOR ODRIVE");
+            RCLCPP_ERROR(this->get_logger(), "FAILED TO LOAD ALL bool CONFIG VALUES FOR ODRIVE");
             }
         }
 
@@ -951,7 +959,7 @@ bool ODriveCanNode::settingsFromConfig(){
 
              } catch (const std::runtime_error& e){
             
-            // RCLCPP_ERROR(this->get_logger(), "FAILED TO LOAD ALL FLOAT CONFIG VALUES FOR ODRIVE");
+            RCLCPP_ERROR(this->get_logger(), "FAILED TO LOAD ALL FLOAT CONFIG VALUES FOR ODRIVE");
             }
         }
 
@@ -964,7 +972,7 @@ bool ODriveCanNode::settingsFromConfig(){
 
              } catch (const std::runtime_error& e){
             
-            // RCLCPP_ERROR(this->get_logger(), "FAILED TO LOAD ALL int32 CONFIG VALUES FOR ODRIVE");
+            RCLCPP_ERROR(this->get_logger(), "FAILED TO LOAD ALL int32 CONFIG VALUES FOR ODRIVE");
             }
         }
 
@@ -977,7 +985,7 @@ bool ODriveCanNode::settingsFromConfig(){
 
              } catch (const std::runtime_error& e){
             
-            // RCLCPP_ERROR(this->get_logger(), "FAILED TO LOAD ALL uint64 CONFIG VALUES FOR ODRIVE");
+            RCLCPP_ERROR(this->get_logger(), "FAILED TO LOAD ALL uint64 CONFIG VALUES FOR ODRIVE");
             }
         }
         
@@ -990,7 +998,7 @@ bool ODriveCanNode::settingsFromConfig(){
 
              } catch (const std::runtime_error& e){
             
-            // RCLCPP_ERROR(this->get_logger(), "FAILED TO LOAD ALL uint32  CONFIG VALUES FOR ODRIVE");
+            RCLCPP_ERROR(this->get_logger(), "FAILED TO LOAD ALL uint32  CONFIG VALUES FOR ODRIVE");
             }
         }
         
@@ -1004,7 +1012,7 @@ bool ODriveCanNode::settingsFromConfig(){
 
              } catch (const std::runtime_error& e){
             
-            // RCLCPP_ERROR(this->get_logger(), "FAILED TO LOAD ALL uint16 CONFIG VALUES FOR ODRIVE");
+            RCLCPP_ERROR(this->get_logger(), "FAILED TO LOAD ALL uint16 CONFIG VALUES FOR ODRIVE");
             }
         }
         
@@ -1019,14 +1027,14 @@ bool ODriveCanNode::settingsFromConfig(){
 
              } catch (const std::runtime_error& e){
             
-            // RCLCPP_ERROR(this->get_logger(), "FAILED TO LOAD ALL uint8 CONFIG VALUES FOR ODRIVE");
+            RCLCPP_ERROR(this->get_logger(), "FAILED TO LOAD ALL uint8 CONFIG VALUES FOR ODRIVE");
             }
         }
 
 
 
 
-        RCLCPP_INFO(this->get_logger(), "LOADED passed in ODrive config values");
+        RCLCPP_INFO(this->get_logger(), "LOADED odrive config values");
 
         return true;
 
@@ -1047,43 +1055,43 @@ void ODriveCanNode::setParameter(std::string parameter_name, int parameter_endpo
         case 0: {
          // bool
             // RCLCPP_DEBUG(rclcpp::Node::get_logger(), "value type was bool");
-            this->declare_parameter<bool>(parameter_name);
+            this->declare_parameter<bool>(parameter_name, true);
             break;
         }
         case 1: {
             // float32
             // RCLCPP_DEBUG(rclcpp::Node::get_logger(), "value type was float32");
-            this->declare_parameter<float>(parameter_name);
+            this->declare_parameter<float>(parameter_name, 0.0);
             break;
         }
         case 2: {
             // int32
             // RCLCPP_DEBUG(rclcpp::Node::get_logger(), "value type was int32");
-            this->declare_parameter<int>(parameter_name);
+            this->declare_parameter<int>(parameter_name, 0);
             break;
         }
         case 3: {
             // int32
             // RCLCPP_DEBUG(rclcpp::Node::get_logger(), "value type was int32");
-            this->declare_parameter<int>(parameter_name);
+            this->declare_parameter<int>(parameter_name, 0);
             break;
         }
         case 4: {
             // int32
             // RCLCPP_DEBUG(rclcpp::Node::get_logger(), "value type was int32");
-            this->declare_parameter<int>(parameter_name);
+            this->declare_parameter<int>(parameter_name, 0);
             break;
         }
         case 5: {
             // int32
             // RCLCPP_DEBUG(rclcpp::Node::get_logger(), "value type was int32");
-            this->declare_parameter<int>(parameter_name);
+            this->declare_parameter<int>(parameter_name, 0);
             break;
         }
         case 6: {
             // int32
             // RCLCPP_DEBUG(rclcpp::Node::get_logger(), "value type was int32");
-            this->declare_parameter<int>(parameter_name);
+            this->declare_parameter<int>(parameter_name, 0);
             break;
         }
         default: 
@@ -1093,16 +1101,12 @@ void ODriveCanNode::setParameter(std::string parameter_name, int parameter_endpo
 
     }
 
-    
    
 
     // Check if the parameter has been passed in
     //  - If so then set the parameter to the passed in value
     //  - If not then don't set the parameter
-         
     if (this->has_parameter(parameter_name)) {
-                       
-        
         // Retrieve the parameter value
         
         // RCLCPP_INFO(this->get_logger(), "%s should be loaded to be %f ",parameter_name.c_str(), endpoint_id);
