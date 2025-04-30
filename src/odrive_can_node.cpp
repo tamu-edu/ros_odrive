@@ -867,52 +867,52 @@ bool ODriveCanNode::settingsFromConfig(){
         std::map<std::string, int> bool_parameter_map;
 
         
-        bool_parameter_map["config.odrv_fan.enabled"] = 192;
+        bool_parameter_map["config.odrv_fan.enabled"] = 213;
 
-        bool_parameter_map["axis0.config.enable_watchdog"] = 219;
-        bool_parameter_map["axis0.controller.config.enable_torque_mode_vel_limit"] = 394;
+        bool_parameter_map["axis0.config.enable_watchdog"] = 244;
+        bool_parameter_map["axis0.controller.config.enable_torque_mode_vel_limit"] = 374;
 
         std::map<std::string, int> float_parameter_map;
 
-        float_parameter_map["config.max_regen_current"] = 139;
-        float_parameter_map["config.dc_bus_undervoltage_trip_level"] = 140;
-        float_parameter_map["config.dc_bus_overvoltage_trip_level"] = 141;
-        float_parameter_map["config.dc_max_positive_current"] = 142;
-        float_parameter_map["config.dc_max_negative_current"] = 143;
+        float_parameter_map["config.max_regen_current"] = 160;
+        float_parameter_map["config.dc_bus_undervoltage_trip_level"] = 161;
+        float_parameter_map["config.dc_bus_overvoltage_trip_level"] = 162;
+        float_parameter_map["config.dc_max_positive_current"] = 163;
+        float_parameter_map["config.dc_max_negative_current"] = 164;
         
-        float_parameter_map["config.odrv_fan.upper"] = 190;
+        float_parameter_map["config.odrv_fan.upper"] = 211;
 
 
-        float_parameter_map["axis0.config.watchdog_timeout"] = 218; 
+        float_parameter_map["axis0.config.watchdog_timeout"] = 243; 
 
-        float_parameter_map["axis0.config.I_bus_hard_min"] = 261;
-        float_parameter_map["axis0.config.I_bus_hard_max"] = 262;
-        float_parameter_map["axis0.config.I_bus_soft_min"] = 263;
-        float_parameter_map["axis0.config.I_bus_soft_max"] = 264;
-        float_parameter_map["axis0.config.P_bus_soft_min"] = 265;
-        float_parameter_map["axis0.config.P_bus_soft_max" ] = 266;
+        float_parameter_map["axis0.config.I_bus_hard_min"] = 288;
+        float_parameter_map["axis0.config.I_bus_hard_max"] = 289;
+        float_parameter_map["axis0.config.I_bus_soft_min"] = 290;
+        float_parameter_map["axis0.config.I_bus_soft_max"] = 291;
+        float_parameter_map["axis0.config.P_bus_soft_min"] = 290;
+        float_parameter_map["axis0.config.P_bus_soft_max" ] = 291;
 
 
         
-        float_parameter_map["axis0.config.torque_soft_min"] = 267;
-        float_parameter_map["axis0.config.torque_soft_max"] = 268;
+        float_parameter_map["axis0.config.torque_soft_min"] = 294;
+        float_parameter_map["axis0.config.torque_soft_max"] = 295;
 
 
-        float_parameter_map["axis0.config.motor.torque_constant"] = 275;
+        float_parameter_map["axis0.config.motor.torque_constant"] = 302;
 
-        float_parameter_map["axis0.config.motor.current_soft_max"] = 287;
-        float_parameter_map["axis0.config.motor.current_hard_max"] = 288;
+        float_parameter_map["axis0.config.motor.current_soft_max"] = 315;
+        float_parameter_map["axis0.config.motor.current_hard_max"] = 316;
 
-        float_parameter_map["axis0.controller.config.vel_gain"] = 401;
-        float_parameter_map["axis0.controller.config.vel_integrator_gain"] = 402;
-        float_parameter_map["axis0.controller.config.vel_integrator_limit"] = 403;
+        float_parameter_map["axis0.controller.config.vel_gain"] = 381;
+        float_parameter_map["axis0.controller.config.vel_integrator_gain"] = 382;
+        float_parameter_map["axis0.controller.config.vel_integrator_limit"] = 383;
         
         
         
 
-        float_parameter_map["axis0.controller.config.inertia"] = 416;
-        float_parameter_map["axis0.controller.config.spinout_mechanical_power_threshold"] = 420;
-        float_parameter_map["axis0.controller.config.spinout_electrical_power_threshold"] = 421;
+        float_parameter_map["axis0.controller.config.inertia"] = 396;
+        float_parameter_map["axis0.controller.config.spinout_mechanical_power_threshold"] = 400;
+        float_parameter_map["axis0.controller.config.spinout_electrical_power_threshold"] = 401;
 
         std::map<std::string, int> int32_parameter_map;
 
@@ -920,14 +920,14 @@ bool ODriveCanNode::settingsFromConfig(){
 
         std::map<std::string, int> uint32_parameter_map;
 
-        uint32_parameter_map["axis0.config.can.heartbeat_msg_rate_ms"] = 249;
-        uint32_parameter_map["axis0.config.can.encoder_msg_rate_ms"] = 250;
-        uint32_parameter_map["axis0.config.can.iq_msg_rate_ms"] = 251;
-        uint32_parameter_map["axis0.config.can.error_msg_rate_ms"] = 252;
-        uint32_parameter_map["axis0.config.can.temperature_msg_rate_ms"] = 253;
-        uint32_parameter_map["axis0.config.can.bus_voltage_msg_rate_ms"] = 254;
-        uint32_parameter_map["axis0.config.can.torques_msg_rate_ms"] = 255;
-        uint32_parameter_map["axis0.config.can.powers_msg_rate_ms"] = 256;
+        uint32_parameter_map["axis0.config.can.heartbeat_msg_rate_ms"] = 274;
+        uint32_parameter_map["axis0.config.can.encoder_msg_rate_ms"] = 275;
+        uint32_parameter_map["axis0.config.can.iq_msg_rate_ms"] = 276;
+        uint32_parameter_map["axis0.config.can.error_msg_rate_ms"] = 277;
+        uint32_parameter_map["axis0.config.can.temperature_msg_rate_ms"] = 278;
+        uint32_parameter_map["axis0.config.can.bus_voltage_msg_rate_ms"] = 279;
+        uint32_parameter_map["axis0.config.can.torques_msg_rate_ms"] = 280;
+        uint32_parameter_map["axis0.config.can.powers_msg_rate_ms"] = 281;
         
         
         std::map<std::string, int> uint16_parameter_map;
