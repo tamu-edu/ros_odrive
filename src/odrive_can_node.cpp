@@ -182,12 +182,13 @@ bool ODriveCanNode::init(EpollEventLoop* event_loop) {
 
     bool set_config;
     this->get_parameter("set_values_from_config", set_config);
-    
+    RCLCPP_INFO(rclcpp::Node::get_logger(), "Endpoint IDs for firmware version 6.11");
+
    if(set_config){
         set_config = settingsFromConfig();
-        RCLCPP_INFO(rclcpp::Node::get_logger(), "set values");
+        RCLCPP_INFO(rclcpp::Node::get_logger(), "SET the odrive config values from parameters");
     }else{
-        RCLCPP_INFO(rclcpp::Node::get_logger(), "did not set values");
+        RCLCPP_INFO(rclcpp::Node::get_logger(), "DID NOT Set the odrive config values from parameters");
     }
     
 
