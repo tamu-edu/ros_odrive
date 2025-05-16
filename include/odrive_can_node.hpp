@@ -55,7 +55,6 @@ using ClearErrors = odrive_can::srv::ClearErrors;
 
 using ValueAccess = odrive_can::srv::ValueAccess;
 
-
 // CUSTOM CODE END
 
 using AxisState = odrive_can::srv::AxisState;
