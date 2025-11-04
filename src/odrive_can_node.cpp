@@ -3,6 +3,7 @@
 #include "byte_swap.hpp"
 #include <sys/eventfd.h>
 #include <chrono>
+#include <bitset>
 
 enum CmdId : uint32_t {
     // This enum structure is where we assign a name to each cmd_id for the CAN protocols
@@ -423,7 +424,15 @@ void ODriveCanNode::recv_callback(const can_frame& frame) {
     if (ctrl_pub_flag_ == 0b1111) {
         ctrl_publisher_->publish(ctrl_stat_);
         ctrl_pub_flag_ = 0;
-    }
+    } 
+    // else {
+    //     const int num_bits = sizeof(short int) * 8; 
+    //     std::bitset<num_bits> binary_representation(ctrl_pub_flag_);
+
+    //     // Print the binary representation
+    //     //std::cout << "The short int " << num << " in binary is: " << binary_representation << std::endl;
+    //     std::cout << "YOOO not publishin " << binary_representation << std::endl;
+    // }
     
     if (odrv_pub_flag_ == 0b111) {
         odrv_publisher_->publish(odrv_stat_);
@@ -555,7 +564,6 @@ void ODriveCanNode::control_vel_gains_callback(const odrive_can::msg::ControlVel
     RCLCPP_INFO(rclcpp::Node::get_logger(), "vel gain: %f", msg->vel_gain);
     RCLCPP_INFO(rclcpp::Node::get_logger(), "vel integrator gain: %f", msg->vel_integrator_gain);
 
-
     // This will used the set_vel_gains protocol to set the vel_gain and vel_integrator_gain
     struct can_frame frame;
     frame.can_id = node_id_ << 5 | kSetVelGains;
@@ -566,7 +574,6 @@ void ODriveCanNode::control_vel_gains_callback(const odrive_can::msg::ControlVel
     }
     frame.can_dlc = 8;
     can_intf_.send_can_frame(frame);
-
 
     // this will send a CAN message to set the vel_integrator_limit value to the one specified in the message
     struct can_frame vel_int_limit_frame;
@@ -618,7 +625,6 @@ void ODriveCanNode::control_traj_vel_lim_callback(const odrive_can::msg::Control
     can_intf_.send_can_frame(frame);
 }
 
-
 void ODriveCanNode::control_traj_accel_lims_callback(const odrive_can::msg::ControlTrajAccelLims::SharedPtr msg) {
     RCLCPP_INFO(rclcpp::Node::get_logger(), "control traj accel callback started");
     struct can_frame frame;
@@ -630,7 +636,6 @@ void ODriveCanNode::control_traj_accel_lims_callback(const odrive_can::msg::Cont
     frame.can_dlc = 8;
     can_intf_.send_can_frame(frame);
 }
-
 
 void ODriveCanNode::reboot_message_callback(const odrive_can::msg::RebootMessage::SharedPtr msg){
     RCLCPP_INFO(rclcpp::Node::get_logger(), "Reboot message callback was initiated %d", msg->action);
@@ -652,7 +657,6 @@ void ODriveCanNode::reboot_message_callback(const odrive_can::msg::RebootMessage
     }
    
 }
-
 
 // CUSTOM CODE END
 
@@ -715,10 +719,6 @@ void ODriveCanNode::clear_errors_service_callback(const std::shared_ptr<ClearErr
         
 }
 
-
-
-
-
 void ODriveCanNode::value_access_service_callback(const std::shared_ptr<ValueAccess::Request> request, std::shared_ptr<ValueAccess::Response> response) {
     
     
@@ -735,13 +735,13 @@ void ODriveCanNode::value_access_service_callback(const std::shared_ptr<ValueAcc
         value_access_reponse_.opcode = request->opcode;
         value_access_reponse_.endpoint_id = request->endpoint_id;
         
-
-
         struct can_frame frame;
         frame.can_id = node_id_ << 5 | kRxSdo;
         {
             write_le<uint8_t>(request->opcode, frame.data);
             write_le<uint16_t>(request->endpoint_id, frame.data + 1);
+            write_le<uint8_t>(0, frame.data + 3);
+
             if(request->opcode == 0){
                 // If the message is asking to read a value then don't write the value to CAN
 
@@ -842,12 +842,7 @@ void ODriveCanNode::value_access_service_callback(const std::shared_ptr<ValueAcc
         RCLCPP_INFO(rclcpp::Node::get_logger(), "Got Service response!!!");
 }
 
-
 // CUSTOM CODE END
-
-
-
-
 
 
 inline bool ODriveCanNode::verify_length(const std::string&name, uint8_t expected, uint8_t length) {
